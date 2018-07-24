@@ -18,14 +18,15 @@ class Saved extends React.Component {
             console.log(results.data);
             this.setState({
                 result:results.data
+            }, () => {
+                console.log(this.state.result)
             })
         })
     }
 
     deleteArticle = (id) => {
         axios.delete(`/api/articles/${id}`).then(results => {
-            console.log('deleted' + results);
-            // window.location.href = '/saved';
+            this.getArticles();
         }).catch(err => {
             console.log(err);
         })
@@ -37,10 +38,9 @@ class Saved extends React.Component {
             <h1 id = 'resultHeader'>Saved Articles</h1>
             {this.state.result.map((article, i) => {
                 return (
-                    <div>
+                    <div key = {i}>
                         <p ><a 
                             className = 'articleName' 
-                            key={i} 
                             id = {article._id} 
                             href={article.url}>
                             {article.title}

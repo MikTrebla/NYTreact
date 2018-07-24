@@ -91,8 +91,8 @@ class SearchForm extends React.Component {
                     <h1 id = 'resultHeader'>Results</h1>
                     {this.state.result.map( (article, i) => {
                         return (
-                            <div>
-                                <p ><a className = 'articleName' key = {i} 
+                            <div key = {i}>
+                                <p ><a className = 'articleName' 
                                     id = {article._id} 
                                     href={article.web_url}>{article.headline.main}
                                 </a></p>
