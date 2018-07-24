@@ -1,0 +1,15 @@
+html {
+    font-family: 'Noto Sans', sans-serif;    
+}
+
+#savedHeader {
+    /* width : 80%; */
+    background-color : rgb(76, 76, 161);
+    padding:auto;
+    text-align:center;
+}
+
+#savedContainer {
+    width: 100%;
+}
+

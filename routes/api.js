@@ -24,8 +24,9 @@ router.delete('/api/articles/:id', (req, res) => {
     Article.deleteOne({
         _id: req.params.id
     }).then(result => {
-        // res.location('/saved')
         res.json(result);
+    }).catch(err => {
+        console.log(err);
     })
 })
 

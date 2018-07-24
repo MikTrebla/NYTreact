@@ -12,26 +12,24 @@ class SearchForm extends React.Component {
             url:''
         }
     }
-
+    componentDidMount() {
+        this.searchNYT();
+    }
+    
     searchNYT = () => {
         axios.get(`https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=8d1a8f1f8fac472d8dd55584973f5e02&q=${this.state.topic}`).then(res => {
             this.setState({
                 result : res.data.response.docs
-            }, () => {
-                console.log(this.state.result)
             })
-           
-            
         });
     }
 
-    saveArticle = id => {
+    saveArticle = (id) => {
 
         let filterArray = this.state.result.filter(article => {
             return article._id === id;
         });
         let filtered = filterArray[0];
-        console.log(filtered);
         this.setState({
             saved : {
                 title:filtered.headline.main,
@@ -48,18 +46,15 @@ class SearchForm extends React.Component {
         })
     }
 
-    searchInputChange = event => {
-        const {
-            name,
-            value
-        } = event.target;
+    searchInputChange = (event) => {
+        const {name,value} = event.target;
         this.setState({
             [name]: value
         })
 
     }
 
-    handleFormSubmit = event => {
+    handleFormSubmit = (event) => {
         event.preventDefault();
         this.searchNYT(this.state.search);
     }
@@ -79,31 +74,37 @@ class SearchForm extends React.Component {
                         value = {this.state.topic} onChange = {this.searchInputChange}
                         id = "example-text-input"/>
                     </div>
-                </div> 
-            
+                </div>
                     <br/>
-                    <button type = "submit"
-                    className = "btn btn-primary"
-                    onClick = {this.handleFormSubmit}> Submit 
-                    </button> 
-
+                    <div className = 'button-container'>
+                        <button type = "submit"
+                        className = "btn btn-info"
+                        onClick = {this.handleFormSubmit}> Submit 
+                        </button> 
+                    </div>
                 <div>
                     <h1 id = 'resultHeader'>Results</h1>
-                    {this.state.result.map( (article, i) => {
-                        return (
-                            <div key = {i}>
-                                <p ><a className = 'articleName' 
-                                    id = {article._id} 
-                                    href={article.web_url}>{article.headline.main}
-                                </a></p>
-                                    Published:{article.pub_date}
-                                <button onClick = {() => this.saveArticle(article._id)}
-                                    type = 'submit'> 
-                                    SAVE 
-                                </button>
-                            </div>
-                        )
-                    })}
+                    <div className = 'row'>
+                        <div className = 'col-md-2'></div>
+                        <div className = 'col-md-8 result-container'>
+                            {this.state.result.map( (article, i) => {
+                                return (
+                                    <div key = {i}>
+                                        <p ><a className = 'articleName' 
+                                            id = {article._id} 
+                                            href={article.web_url}>{article.headline.main}
+                                        </a></p>
+                                            Published:{article.pub_date}
+                                        <button className = 'btn btn-info'onClick = {() => this.saveArticle(article._id)}
+                                            type = 'submit'> 
+                                            SAVE 
+                                        </button>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                        <div className = 'col-md-2'></div>
+                    </div> 
                 </div>  
             </div>
         )
