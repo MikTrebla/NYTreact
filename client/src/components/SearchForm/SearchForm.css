@@ -33,8 +33,13 @@ padding: auto;
 .button-container{
     text-align:center;
     margin-bottom:5px;
+    padding-left : 5px;
 }
 
 .result-container {
     text-align:justify;
+}
+
+input {
+    text-align:Center;
 }

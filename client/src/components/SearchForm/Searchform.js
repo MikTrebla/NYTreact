@@ -12,6 +12,7 @@ class SearchForm extends React.Component {
             url:''
         }
     }
+
     componentDidMount() {
         this.searchNYT();
     }
@@ -83,7 +84,9 @@ class SearchForm extends React.Component {
                         </button> 
                     </div>
                 <div>
-                    <h1 id = 'resultHeader'>Results</h1>
+                    <h1 id = 'resultHeader'>
+                        Results
+                    </h1>
                     <div className = 'row'>
                         <div className = 'col-md-2'></div>
                         <div className = 'col-md-8 result-container'>
@@ -91,7 +94,7 @@ class SearchForm extends React.Component {
                                 return (
                                     <div key = {i}>
                                         <p ><a className = 'articleName' 
-                                            id = {article._id} 
+                                            id = {article._id} target = '_blank' 
                                             href={article.web_url}>{article.headline.main}
                                         </a></p>
                                             Published:{article.pub_date}

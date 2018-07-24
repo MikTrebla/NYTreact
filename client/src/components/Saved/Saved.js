@@ -42,6 +42,7 @@ class Saved extends React.Component {
                             <p ><a 
                                 className = 'articleName' 
                                 id = {article._id} 
+                                target = '_blank' 
                                 href={article.url}>
                                 {article.title}
                             </a></p>
