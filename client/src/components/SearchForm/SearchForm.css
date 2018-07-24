@@ -1,0 +1,27 @@
+#searchHeader{
+    text-align:center;
+}
+
+#resultHeader{
+    text-align:center;
+}
+
+.form-group-row{
+    text-align:center;
+}
+
+#searchForm {
+    /* align-content : center; */
+    padding: auto;
+    margin:auto;
+    max-width: 50%;
+}
+
+button {
+margin: auto;
+padding: auto;
+}
+
+.articleName {
+    font-size : 30px;
+}

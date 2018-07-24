@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import './SearchForm.css';
 
 class SearchForm extends React.Component {
     state = {
@@ -12,7 +13,7 @@ class SearchForm extends React.Component {
         }
     }
 
-    searchNYT = query => {
+    searchNYT = () => {
         axios.get(`https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=8d1a8f1f8fac472d8dd55584973f5e02&q=${this.state.topic}`).then(res => {
             this.setState({
                 result : res.data.response.docs
@@ -25,8 +26,7 @@ class SearchForm extends React.Component {
     }
 
     saveArticle = id => {
-        // id.preventDefault();
-        // console.log('saved pressed');
+
         let filterArray = this.state.result.filter(article => {
             return article._id === id;
         });
@@ -66,13 +66,13 @@ class SearchForm extends React.Component {
 
     render() {
         return ( 
-            <div >
-                <h1 > Search </h1> 
+            <div id = 'searchForm'>
+                <h1 id = 'searchHeader'> Search </h1> 
                 <div className = 'form-group-row' >
                     <label htmlFor = "example-text-input" 
                         className = "col-2 col-form-label"> Topic 
-                    </label> 
-                    <div className = "col-10" >
+                    </label>
+                    <div className = "col-12" >
                         <input className = "form-control" 
                         name = 'topic' 
                         type = "text" 
@@ -81,54 +81,25 @@ class SearchForm extends React.Component {
                     </div>
                 </div> 
             
-                <div className = "form-group-row" >
-                    <label
-                        htmlFor = "example-date-input"
-                        className = "col-2 col-form-label" > Date Start 
-                    </label> 
                     <br/>
-                    <div className = "col-10" >
-                        <input className = "form-control"
-                        name = 'startdate'
-                        type = "date"
-                        value = {this.state.startdate}
-                        onChange = {this.searchInputChange}
-                        id = "example-date-input"/>
-                    </div> 
-                </div>   
-                <div className = "form-group-row" >
-                    <label htmlFor = "example-date-input" 
-                        className = "col-2 col-form-label"> Date End 
-                    </label> 
-                    <br/>
-                    <div className = "col-10" >
-                        <input className = "form-control" 
-                            type = "date" 
-                            name = 'enddate' 
-                            value = {this.state.enddate} 
-                            onChange = {this.searchInputChange} 
-                            id = "example-date-input"/>
-                    </div> 
-                </div> 
                     <button type = "submit"
                     className = "btn btn-primary"
                     onClick = {this.handleFormSubmit}> Submit 
                     </button> 
 
                 <div>
-                    <h1>Result</h1>
+                    <h1 id = 'resultHeader'>Results</h1>
                     {this.state.result.map( (article, i) => {
                         return (
                             <div>
-                                <p><a key = {i} 
+                                <p ><a className = 'articleName' key = {i} 
                                     id = {article._id} 
                                     href={article.web_url}>{article.headline.main}
                                 </a></p>
-                                <p>
                                     Published:{article.pub_date}
-                                </p>
                                 <button onClick = {() => this.saveArticle(article._id)}
-                                    type = 'submit'> SAVE 
+                                    type = 'submit'> 
+                                    SAVE 
                                 </button>
                             </div>
                         )
