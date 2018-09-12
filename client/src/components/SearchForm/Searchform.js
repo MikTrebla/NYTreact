@@ -10,7 +10,9 @@ class SearchForm extends React.Component {
             title: '',
             date: '',
             url:''
-        }
+        },
+        start:'',
+        end:''
     }
 
     componentDidMount() {
@@ -18,11 +20,34 @@ class SearchForm extends React.Component {
     }
     
     searchNYT = () => {
-        axios.get(`https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=8d1a8f1f8fac472d8dd55584973f5e02&q=${this.state.topic}`).then(res => {
-            this.setState({
-                result : res.data.response.docs
-            })
-        });
+        let today = new Date();
+        let dd = today.getDate();
+        let mm = today.getMonth()+1;
+        let yyyy = today.getFullYear();
+        if(dd<10) {
+            dd = '0'+dd
+        } 
+        if(mm<10) {
+            mm = '0'+mm
+        } 
+        today = `${yyyy}-${mm}-${dd}`
+
+        if (this.state.start === '' || this.state.end === '') {
+            axios.get(`https://api.nytimes.com/svc/search/v2/articlesearch.json?sort=newest&api-key=8d1a8f1f8fac472d8dd55584973f5e02&begin_date=${today}&q=${this.state.topic}`)
+            .then(res => {
+                this.setState({
+                    result : res.data.response.docs
+                })
+            });
+        } else {
+           axios.get(`https://api.nytimes.com/svc/search/v2/articlesearch.json?sort=newest&api-key=8d1a8f1f8fac472d8dd55584973f5e02&begin_date=${this.state.start}&end_date=${this.state.end}&q=${this.state.topic}`)
+           .then(res => {
+                this.setState({
+                    result : res.data.response.docs
+                })
+            }); 
+        }
+        
     }
 
     saveArticle = (id) => {
@@ -40,9 +65,9 @@ class SearchForm extends React.Component {
         }, () => {
             axios.post('/api/articles',this.state.saved)
             .then( response => {
-                console.log('sent to back-end' + response);
+                alert('Saved successfully')
             }).catch(err => {
-                console.log(err);
+                alert('Sorry, there was an error. Please try again.')
             })
         })
     }
@@ -54,7 +79,14 @@ class SearchForm extends React.Component {
         })
 
     }
-
+    searchDateRange = (event) => {
+        const {name,value} = event.target;
+        this.setState({
+            [name]:value
+        }, () => {
+            console.log(this.state.start, this.state.end)
+        })
+    }
     handleFormSubmit = (event) => {
         event.preventDefault();
         this.searchNYT(this.state.search);
@@ -62,18 +94,35 @@ class SearchForm extends React.Component {
 
     render() {
         return ( 
-            <div id = 'searchForm'>
-                <h1 id = 'searchHeader'> Search </h1> 
-                <div className = 'form-group-row' >
-                    <label htmlFor = "example-text-input" 
-                        className = "col-2 col-form-label"> Topic 
-                    </label>
+            <div id = 'container' className='row'>
+            <div className='col-md-3'>
+            <h1 id = 'searchHeader'> Search </h1> 
+                <div id='searchForm'>
+                    <div className = 'form-group-row' >
+                        <label htmlFor = "example-text-input" 
+                            > Topic 
+                        </label>
+                        <div className = "col-12" >
+                            <input className = "form-control" 
+                            name = 'topic' 
+                            type = "text" 
+                            value = {this.state.topic} onChange = {this.searchInputChange}
+                            id = "example-text-input"/>
+                        </div>
+                       
+                    </div>
+                    <div className = 'form-group-row'>
+                        <label htmlFor="start">Start</label>
+                        <div className = "col-12" >
+                            <input className = "form-control"  onChange ={this.searchDateRange} type="date" id="start" name="start"
+                            value={this.state.start}/>
+                        </div>
+                    </div>
+                <div className = 'form-group-row'>
+                    <label htmlFor="end">End</label>
                     <div className = "col-12" >
-                        <input className = "form-control" 
-                        name = 'topic' 
-                        type = "text" 
-                        value = {this.state.topic} onChange = {this.searchInputChange}
-                        id = "example-text-input"/>
+                        <input className = "form-control" onChange ={this.searchDateRange} type="date" id="end" name="end"
+                        value={this.state.end}/>
                     </div>
                 </div>
                     <br/>
@@ -83,12 +132,15 @@ class SearchForm extends React.Component {
                         onClick = {this.handleFormSubmit}> Submit 
                         </button> 
                     </div>
-                <div>
+                </div>
+            </div>
+                
+                <div id='resultsContainer col-md-8'>
                     <h1 id = 'resultHeader'>
                         Results
                     </h1>
                     <div className = 'row'>
-                        <div className = 'col-md-2'></div>
+
                         <div className = 'col-md-8 result-container'>
                             {this.state.result.map( (article, i) => {
                                 return (
@@ -106,7 +158,6 @@ class SearchForm extends React.Component {
                                 )
                             })}
                         </div>
-                        <div className = 'col-md-2'></div>
                     </div> 
                 </div>  
             </div>
